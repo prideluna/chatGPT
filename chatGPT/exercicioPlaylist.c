@@ -407,3 +407,86 @@ int main() {
 }
 
 
+    
+    
+    
+    
+    
+    -------------------------------------------------------------------------------
+        
+        void imprime_artistas(artista_no *head) {
+    printf("Lista de artistas:\n\n");
+    while (head != NULL) {
+        printf("ID: %d\n", head->artista->id);
+        printf("Nome: %s\n", head->artista->nome);
+        printf("Genero: %s\n\n", head->artista->genero);
+        head = head->prox;
+    }
+}
+
+void imprime_musicas_por_artista(musica_no *head, artista_no *artistas, int id_artista) {
+    printf("Musicas do artista com ID %d:\n\n", id_artista);
+    while (head != NULL) {
+        if (head->musica->id_artista == id_artista) {
+            int h, m, s;
+            s = head->musica->duracao;
+            h = s / 3600;
+            s %= 3600;
+            m = s / 60;
+            s %= 60;
+
+            printf("ID: %d\n", head->musica->id);
+            printf("Titulo: %s\n", head->musica->titulo);
+            printf("Duracao: %02d:%02d:%02d\n\n", h, m, s);
+        }
+        head = head->prox;
+    }
+}
+------------------------------------------------------------------------
+    
+    typedef struct playlist {
+    int id;
+    musica *musica;
+    struct playlist *prox;
+} playlist;
+
+void cria_playlist(playlist **head, musica_no *musicas) {
+    int id_musica;
+    char entrada[1000];
+
+    printf("Digite os IDs das musicas separados por espaco:\n");
+    scanf(" %[^\n]s", entrada);
+
+    playlist *nova_playlist = NULL;
+    playlist *playlist_atual = NULL;
+    char *ptr = strtok(entrada, " ");
+    while (ptr != NULL) {
+        id_musica = atoi(ptr);
+        musica_no *musica_atual = musicas;
+        while (musica_atual != NULL) {
+            if (musica_atual->musica->id == id_musica) {
+                playlist *nova_musica = (playlist *)malloc(sizeof(playlist));
+                nova_musica->id = id_musica;
+                nova_musica->musica = musica_atual->musica;
+
+                if (*head == NULL) {
+                    *head = nova_musica;
+                    nova_musica->prox = nova_musica;
+                } else {
+                    playlist_atual = *head;
+                    while (playlist_atual->prox != *head) {
+                        playlist_atual = playlist_atual->prox;
+                    }
+                    playlist_atual->prox = nova_musica;
+                    nova_musica->prox = *head;
+                }
+                break;
+            }
+            musica_atual = musica_atual->prox;
+        }
+        ptr = strtok(NULL, " ");
+    }
+
+    printf("Playlist criada com sucesso!\n");
+}
+
