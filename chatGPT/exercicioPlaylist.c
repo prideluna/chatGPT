@@ -131,4 +131,38 @@ void imprimir_musicas(musica_no *lista_musica, artista_no *lista_artista) {
         }
         musica_atual = musica_atual->prox;
     }
+ int main() {
+    artista_no *lista_artistas = NULL;
+    musica_no *lista_musicas = NULL;
+
+    int opcao = 0;
+    while (opcao != 4) {
+        printf("\nEscolha uma opcao:\n");
+        printf("1 - Cadastrar novo artista\n");
+        printf("2 - Cadastrar nova musica\n");
+        printf("3 - Imprimir todas as musicas\n");
+        printf("4 - Sair\n");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                cadastrar_artista(&lista_artistas);
+                break;
+            case 2:
+                cadastrar_musica(&lista_musicas, lista_artistas);
+                break;
+            case 3:
+                imprimir_musicas(lista_musicas, lista_artistas);
+                break;
+            case 4:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opcao invalida.\n");
+        }
+    }
+
+    return 0;
+}
+    
 }
