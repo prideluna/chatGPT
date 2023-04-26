@@ -261,4 +261,149 @@ int main() {
     // insere_musica(&musicas, nova_musica);
 
     // Imprime todas as músicas com todos os dados, inclu
+    
+    
+    
+    
+    
+    ------------------------------------------------------------------------------------------------------
+        #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct musica {
+    int id;
+    char titulo[200];
+    int id_artista;
+    int duracao; // segundos
+} musica;
+
+typedef struct artista {
+    int id;
+    char nome[200];
+    char genero[200];
+} artista;
+
+typedef struct musica_no {
+    musica *musica;
+    struct musica_no *prox;
+} musica_no;
+
+typedef struct artista_no {
+    artista *artista;
+    struct artista_no *prox;
+} artista_no;
+
+void insere_artista(artista_no **head) {
+    artista *novo_artista = (artista *)malloc(sizeof(artista));
+
+    printf("Digite o ID do artista: ");
+    scanf("%d", &novo_artista->id);
+    printf("Digite o nome do artista: ");
+    scanf(" %[^\n]s", novo_artista->nome);
+    printf("Digite o genero musical do artista: ");
+    scanf(" %[^\n]s", novo_artista->genero);
+
+    artista_no *novo_no = (artista_no *)malloc(sizeof(artista_no));
+    novo_no->artista = novo_artista;
+    novo_no->prox = *head;
+    *head = novo_no;
+}
+
+void insere_musica(musica_no **head, artista_no *artistas) {
+    musica *nova_musica = (musica *)malloc(sizeof(musica));
+
+    printf("Digite o ID da musica: ");
+    scanf("%d", &nova_musica->id);
+    printf("Digite o titulo da musica: ");
+    scanf(" %[^\n]s", nova_musica->titulo);
+    printf("Digite o ID do artista: ");
+    scanf("%d", &nova_musica->id_artista);
+    printf("Digite a duracao da musica em segundos: ");
+    scanf("%d", &nova_musica->duracao);
+
+    musica_no *novo_no = (musica_no *)malloc(sizeof(musica_no));
+    novo_no->musica = nova_musica;
+    novo_no->prox = *head;
+    *head = novo_no;
+}
+
+char *busca_nome_artista(artista_no *head, int id_artista) {
+    while (head != NULL) {
+        if (head->artista->id == id_artista) {
+            return head->artista->nome;
+        }
+        head = head->prox;
+    }
+    return NULL;
+}
+
+void imprime_musicas(musica_no *head, artista_no *artistas) {
+    while (head != NULL) {
+        int h, m, s;
+        s = head->musica->duracao;
+        h = s / 3600;
+        s %= 3600;
+        m = s / 60;
+        s %= 60;
+
+        printf("ID: %d\n", head->musica->id);
+        printf("Titulo: %s\n", head->musica->titulo);
+        printf("Artista: %s\n", busca_nome_artista(artistas, head->musica->id_artista));
+        printf("Duracao: %02d:%02d:%02d\n\n", h, m, s);
+
+        head = head->prox;
+    }
+}
+
+int main() {
+    artista_no *artistas = NULL;
+    musica_no *musicas = NULL
+
+            int opcao = 0;
+    while (opcao != 3) {
+        printf("Escolha uma opcao:\n");
+        printf("1. Cadastrar novo artista\n");
+        printf("2. Cadastrar nova musica\n");
+        printf("3. Sair\n");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                insere_artista(&artistas);
+                break;
+            case 2:
+                insere_musica(&musicas, artistas);
+                break;
+            case 3:
+                break;
+            default:
+                printf("Opcao invalida. Tente novamente.\n");
+                break;
+        }
+    }
+
+    // Imprime todas as músicas com todos os dados, incluindo o nome do artista e a duração no formato HH:MM:SS.
+    imprime_musicas(musicas, artistas);
+
+    // Libera a memória alocada para a lista de artistas e músicas.
+    artista_no *artista_atual;
+    while (artistas != NULL) {
+        artista_atual = artistas;
+        artistas = artistas->prox;
+        free(artista_atual->artista);
+        free(artista_atual);
+    }
+
+    musica_no *musica_atual;
+    while (musicas != NULL) {
+        musica_atual = musicas;
+        musicas = musicas->prox;
+        free(musica_atual->musica);
+        free(musica_atual);
+    }
+
+    return 0;
+}
+
 
