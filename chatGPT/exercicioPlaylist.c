@@ -166,3 +166,99 @@ void imprimir_musicas(musica_no *lista_musica, artista_no *lista_artista) {
 }
     
 }
+    
+    
+    -------------------------------------------------------------------
+        
+        
+        
+        #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct musica {
+    int id;
+    char titulo[200];
+    int id_artista;
+    int duracao; // segundos
+} musica;
+
+typedef struct artista {
+    int id;
+    char nome[200];
+    char genero[200];
+} artista;
+
+typedef struct musica_no {
+    musica *musica;
+    struct musica_no *prox;
+} musica_no;
+
+typedef struct artista_no {
+    artista *artista;
+    struct artista_no *prox;
+} artista_no;
+
+void insere_artista(artista_no **head, artista *novo_artista) {
+    artista_no *novo_no = (artista_no *)malloc(sizeof(artista_no));
+    novo_no->artista = novo_artista;
+    novo_no->prox = *head;
+    *head = novo_no;
+}
+
+void insere_musica(musica_no **head, musica *nova_musica) {
+    musica_no *novo_no = (musica_no *)malloc(sizeof(musica_no));
+    novo_no->musica = nova_musica;
+    novo_no->prox = *head;
+    *head = novo_no;
+}
+
+char *busca_nome_artista(artista_no *head, int id_artista) {
+    while (head != NULL) {
+        if (head->artista->id == id_artista) {
+            return head->artista->nome;
+        }
+        head = head->prox;
+    }
+    return NULL;
+}
+
+void imprime_musicas(musica_no *head, artista_no *artistas) {
+    while (head != NULL) {
+        int h, m, s;
+        s = head->musica->duracao;
+        h = s / 3600;
+        s %= 3600;
+        m = s / 60;
+        s %= 60;
+
+        printf("ID: %d\n", head->musica->id);
+        printf("Titulo: %s\n", head->musica->titulo);
+        printf("Artista: %s\n", busca_nome_artista(artistas, head->musica->id_artista));
+        printf("Duracao: %02d:%02d:%02d\n\n", h, m, s);
+
+        head = head->prox;
+    }
+}
+
+int main() {
+    artista_no *artistas = NULL;
+    musica_no *musicas = NULL;
+
+    // Adicione aqui a lógica para criar e cadastrar novos artistas e músicas usando as funções insere_artista e insere_musica.
+    // Exemplo:
+    // artista *novo_artista = (artista *)malloc(sizeof(artista));
+    // novo_artista->id = 1;
+    // strcpy(novo_artista->nome, "Nome do Artista");
+    // strcpy(novo_artista->genero, "Gênero Musical");
+    // insere_artista(&artistas, novo_artista);
+
+    // musica *nova_musica = (musica *)malloc(sizeof(musica));
+    // nova_musica->id = 1;
+    // strcpy(nova_musica->titulo, "Título da Música");
+    // nova_musica->id_artista = 1;
+    // nova_musica->duracao = 200;
+    // insere_musica(&musicas, nova_musica);
+
+    // Imprime todas as músicas com todos os dados, inclu
+
