@@ -652,3 +652,79 @@ void cria_playlist(lplaylists_no **head, musica_no *musicas) {
 }
 
 
+
+    
+    
+    ----------------------------------------------------------------------------------------------
+        #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PLAYLISTS 20
+
+typedef struct musica {
+    int id;
+    char titulo[200];
+    int id_artista;
+    int duracao; // segundos
+} musica;
+
+typedef struct artista {
+    int id;
+    char nome[200];
+    char genero[200];
+} artista;
+
+typedef struct musica_no {
+    musica *musica;
+    struct musica_no *prox;
+} musica_no;
+
+typedef struct artista_no {
+    artista *artista;
+    struct artista_no *prox;
+} artista_no;
+
+typedef struct playlist_no {
+    int id;
+    musica *musica;
+    struct playlist_no *prox;
+} playlist_no;
+
+typedef struct lplaylists_no { 
+    int id;
+    char nome[200];
+    playlist_no *playlist;
+    struct lplaylists_no *prox;
+} lplaylists_no;
+
+// ... restante do código
+
+void cria_playlist(lplaylists_no **head, musica_no *musicas) {
+    // ... código omitido
+
+    nova_lplaylist->playlist = nova_playlist;
+    nova_lplaylist->prox = *head;
+    *head = nova_lplaylist;
+
+    printf("Playlist criada com sucesso!\n");
+}
+
+void imprime_playlist(lplaylists_no *head, artista_no *artistas) {
+    lplaylists_no *playlist_atual = head;
+
+    while (playlist_atual != NULL) {
+        playlist_no *musicas_playlist = playlist_atual->playlist;
+        while (musicas_playlist != NULL) {
+            printf("ID: %d\n", musicas_playlist->musica->id);
+            printf("Titulo: %s\n", musicas_playlist->musica->titulo);
+            printf("Artista: %s\n", encontra_artista_por_id(artistas, musicas_playlist->musica->id_artista)->artista->nome);
+            printf("Duracao: %02d:%02d:%02d\n", musicas_playlist->musica->duracao / 3600, (musicas_playlist->musica->duracao / 60) % 60, musicas_playlist->musica->duracao % 60);
+            printf("\n");
+            musicas_playlist = musicas_playlist->prox;
+        }
+        playlist_atual = playlist_atual->prox;
+    }
+}
+
+// ... restante do código
