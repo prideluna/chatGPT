@@ -602,5 +602,53 @@ void cria_playlist(lplaylists_no **head, musica_no *musicas) {
         }
     }
 }
+---------------------------------------------------------------------------------------------------------------------
+    
+    
+    void remove_artista(artista_no **head_artista, musica_no **head_musica, playlist_no **playlists, int id_artista) {
+    // remover todas as músicas do artista da lista encadeada de músicas e de todas as playlists em que participam
+    musica_no *musica_atual = *head_musica;
+    musica_no *musica_anterior = NULL;
+    while (musica_atual != NULL) {
+        if (musica_atual->musica->id_artista == id_artista) {
+            remove_musica(head_musica, playlists, musica_atual->musica->id);
+            musica_atual = (musica_anterior != NULL) ? musica_anterior->prox : *head_musica;
+        } else {
+            musica_anterior = musica_atual;
+            musica_atual = musica_atual->prox;
+        }
+    }
+
+    // remover o artista da lista encadeada de artistas
+    artista_no *artista_atual = *head_artista;
+    artista_no *artista_anterior = NULL;
+    while (artista_atual != NULL) {
+        if (artista_atual->artista->id == id_artista) {
+            if (artista_anterior != NULL) {
+                artista_anterior->prox = artista_atual->prox;
+            } else {
+                *head_artista = artista_atual->prox;
+            }
+            free(artista_atual->artista);
+            free(artista_atual);
+            break;
+        }
+        artista_anterior = artista_atual;
+        artista_atual = artista_atual->prox;
+    }
+}
+
+    
+    -----------------------------------------------------------------------------------------------
+        artista_no *encontra_artista_por_id(artista_no *head, int id) {
+    artista_no *artista_atual = head;
+    while (artista_atual != NULL) {
+        if (artista_atual->artista->id == id) {
+            return artista_atual;
+        }
+        artista_atual = artista_atual->prox;
+    }
+    return NULL;
+}
 
 
