@@ -549,3 +549,16 @@ void cria_playlist(lplaylists_no **head, musica_no *musicas) {
     free(indices);
     free(playlist_array);
 }
+    
+    void imprime_playlist(playlist_no *head, artista_no *artistas) {
+    playlist_no *playlist_atual = head;
+    while (playlist_atual != NULL) {
+        printf("ID: %d\n", playlist_atual->musica->id);
+        printf("Titulo: %s\n", playlist_atual->musica->titulo);
+        printf("Artista: %s\n", encontra_artista_por_id(artistas, playlist_atual->musica->id_artista)->artista->nome);
+        printf("Duracao: %02d:%02d:%02d\n", playlist_atual->musica->duracao / 3600, (playlist_atual->musica->duracao / 60) % 60, playlist_atual->musica->duracao % 60);
+        printf("\n");
+        playlist_atual = playlist_atual->prox;
+    }
+}
+
