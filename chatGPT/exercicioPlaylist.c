@@ -727,4 +727,76 @@ void imprime_playlist(lplaylists_no *head, artista_no *artistas) {
     }
 }
 
+    
 // ... restante do código
+
+    
+    
+    ---------------------------------------------------------------------------------------------------------
+        
+        
+        void cria_playlist(lplaylists_no **head, musica_no *musicas) {
+    int id_musica;
+    char entrada[1000];
+
+    printf("Digite os IDs das musicas separados por espaco:\n");
+    scanf(" %[^\n]s", entrada);
+
+    lplaylists_no *nova_lplaylist = (lplaylists_no *)malloc(sizeof(lplaylists_no));
+    nova_lplaylist->id = 1; // ou defina um novo ID de acordo com sua necessidade
+    printf("Digite um nome para a playlist:\n");
+    scanf(" %[^\n]s", nova_lplaylist->nome);
+
+    playlist_no *nova_playlist = NULL;
+    playlist_no *playlist_atual = NULL;
+    char *ptr = strtok(entrada, " ");
+    while (ptr != NULL) {
+        id_musica = atoi(ptr);
+        musica_no *musica_atual = musicas;
+        while (musica_atual != NULL) {
+            if (musica_atual->musica->id == id_musica) {
+                playlist_no *nova_musica = (playlist_no *)malloc(sizeof(playlist_no));
+                nova_musica->id = id_musica;
+                nova_musica->musica = musica_atual->musica;
+                nova_musica->prox = NULL;
+
+                if (nova_playlist == NULL) {
+                    nova_playlist = nova_musica;
+                } else {
+                    playlist_atual->prox = nova_musica;
+                }
+                playlist_atual = nova_musica;
+                break;
+            }
+            musica_atual = musica_atual->prox;
+        }
+        ptr = strtok(NULL, " ");
+    }
+
+    nova_lplaylist->musicas = nova_playlist;
+    nova_lplaylist->prox = *head;
+    *head = nova_lplaylist;
+
+    printf("Playlist criada com sucesso!\n");
+}
+
+    
+    void imprime_playlist(lplaylists_no *lplaylists, artista_no *artistas) {
+    lplaylists_no *lplaylist_atual = lplaylists;
+    while (lplaylist_atual != NULL) {
+        printf("Playlist: %s\n\n", lplaylist_atual->nome);
+        playlist_no *playlist_atual = lplaylist_atual->musicas;
+        while (playlist_atual != NULL) {
+            printf("ID: %d\n", playlist_atual->musica->id);
+            printf("Titulo: %s\n", playlist_atual->musica->titulo);
+            printf("Artista: %s\n", busca_nome_artista(artistas, playlist_atual->musica->id_artista));
+            printf("Duracao: %02d:%02d:%02d\n\n", playlist_atual->musica->duracao / 3600, (playlist_atual->musica->duracao / 60) % 60, playlist_atual->musica->duracao % 60);
+            playlist_atual = playlist_atual->prox;
+        }
+        lplaylist_atual = lplaylist_atual->prox;
+        printf("\n");
+    }
+}
+
+
+                
