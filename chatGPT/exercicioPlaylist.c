@@ -505,3 +505,47 @@ void cria_playlist(lplaylists_no **head, musica_no *musicas) {
 
     printf("Playlist criada com sucesso!\n");
 }
+
+    
+    -------------------------------------------------------------------------------------------------
+        void shuffle(playlist_no *head) {
+    // contar o número de músicas na playlist
+    int num_musicas = 0;
+    playlist_no *playlist_atual = head;
+    while (playlist_atual != NULL) {
+        num_musicas++;
+        playlist_atual = playlist_atual->prox;
+    }
+
+    // criar um array de índices das músicas na playlist
+    int *indices = (int *)malloc(num_musicas * sizeof(int));
+    playlist_atual = head;
+    for (int i = 0; i < num_musicas; i++) {
+        indices[i] = i;
+        playlist_atual = playlist_atual->prox;
+    }
+
+    // embaralhar os índices aleatoriamente
+    for (int i = 0; i < num_musicas; i++) {
+        int j = rand() % num_musicas;
+        int temp = indices[i];
+        indices[i] = indices[j];
+        indices[j] = temp;
+    }
+
+    // percorrer a lista encadeada de playlists, reordenando as músicas de acordo com os índices embaralhados
+    playlist_no **playlist_array = (playlist_no **)malloc(num_musicas * sizeof(playlist_no *));
+    playlist_atual = head;
+    for (int i = 0; i < num_musicas; i++) {
+        playlist_array[i] = playlist_atual;
+        playlist_atual = playlist_atual->prox;
+    }
+
+    for (int i = 0; i < num_musicas; i++) {
+        playlist_array[i]->musica = playlist_array[indices[i]]->musica;
+    }
+
+    // liberar a memória alocada
+    free(indices);
+    free(playlist_array);
+}
