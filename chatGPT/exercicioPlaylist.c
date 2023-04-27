@@ -561,4 +561,46 @@ void cria_playlist(lplaylists_no **head, musica_no *musicas) {
         playlist_atual = playlist_atual->prox;
     }
 }
+    
+    
+    ---------------------------------------------------------------------------------------------------------------------
+        void remove_musica(musica_no **head, playlist_no **playlists, int id_musica) {
+    // remover a música da lista encadeada de músicas
+    musica_no *musica_atual = *head;
+    musica_no *musica_anterior = NULL;
+    while (musica_atual != NULL) {
+        if (musica_atual->musica->id == id_musica) {
+            if (musica_anterior != NULL) {
+                musica_anterior->prox = musica_atual->prox;
+            } else {
+                *head = musica_atual->prox;
+            }
+            free(musica_atual->musica);
+            free(musica_atual);
+            break;
+        }
+        musica_anterior = musica_atual;
+        musica_atual = musica_atual->prox;
+    }
+
+    // remover a música de todas as playlists em que ela participa
+    for (int i = 0; i < MAX_PLAYLISTS; i++) {
+        playlist_no *playlist_atual = playlists[i];
+        playlist_no *playlist_anterior = NULL;
+        while (playlist_atual != NULL) {
+            if (playlist_atual->musica->id == id_musica) {
+                if (playlist_anterior != NULL) {
+                    playlist_anterior->prox = playlist_atual->prox;
+                } else {
+                    playlists[i] = playlist_atual->prox;
+                }
+                free(playlist_atual);
+                break;
+            }
+            playlist_anterior = playlist_atual;
+            playlist_atual = playlist_atual->prox;
+        }
+    }
+}
+
 
