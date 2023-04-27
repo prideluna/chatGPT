@@ -799,4 +799,27 @@ void imprime_playlist(lplaylists_no *head, artista_no *artistas) {
 }
 
 
-                
+     --------------------------------------------------------------------------------------------
+         
+         
+         // remover a música de todas as playlists em que ela participa
+for (int i = 0; i < MAX_PLAYLISTS; i++) {
+    if(playlists[i] != NULL) {  // Adicione esta linha para verificar se a playlist é válida
+        playlist_no *playlist_atual = playlists[i];
+        playlist_no *playlist_anterior = NULL;
+        while (playlist_atual != NULL) {
+            if (playlist_atual->musica->id == id_musica) {
+                if (playlist_anterior != NULL) {
+                    playlist_anterior->prox = playlist_atual->prox;
+                } else {
+                    playlists[i] = playlist_atual->prox;
+                }
+                free(playlist_atual);
+                break;
+            }
+            playlist_anterior = playlist_atual;
+            playlist_atual = playlist_atual->prox;
+        }
+    }
+}
+
